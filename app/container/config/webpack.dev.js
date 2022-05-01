@@ -13,7 +13,8 @@ const devConfig = {
     mode: "development",
     devServer: {
         static: path.join(__dirname, "dist"),
-        port: 3000
+        port: 3000,
+        historyApiFallback: true
     },
     output: {
         publicPath: "auto"
@@ -22,7 +23,8 @@ const devConfig = {
         new ModuleFederationPlugin({
             name: "container",
             remotes: {
-                'fragment': `fragment@http://${domain}:3001/remoteEntry.js`
+                'fragment': `fragment@http://${domain}:3001/remoteEntry.js`,
+                'dashboard': `dashboard@http://${domain}:3002/remoteEntry.js`,
             },
             shared: packageJson.dependencies
         }),

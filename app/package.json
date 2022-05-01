@@ -4,7 +4,8 @@
   "workspaces": {
     "packages": [
       "container",
-      "fragment"
+      "fragment",
+      "dashboard"
     ]
   },
   "scripts": {

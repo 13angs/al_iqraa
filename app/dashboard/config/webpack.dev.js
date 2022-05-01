@@ -10,7 +10,7 @@ const devConfig = {
     mode: 'development',
     devServer: {
         static: path.join(__dirname, 'dist'),
-        port: 3001,
+        port: 3002,
         historyApiFallback: true
     },
     output: {
@@ -19,10 +19,10 @@ const devConfig = {
     plugins: [
         // To learn more about the usage of this plugin, please visit https://webpack.js.org/plugins/module-federation-plugin/
         new ModuleFederationPlugin({
-            name: 'fragment',
+            name: 'dashboard',
             filename: 'remoteEntry.js',
             exposes: {
-                './FragmentApp': './src/bootstrap',
+                './DashboardApp': './src/bootstrap',
             },
             shared: packageJson.dependencies,
         }),
