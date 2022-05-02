@@ -17,7 +17,7 @@ const devConfig = {
         historyApiFallback: true
     },
     output: {
-        publicPath: "auto"
+        publicPath: "http://localhost:3000/"
     },
     plugins: [
         new ModuleFederationPlugin({

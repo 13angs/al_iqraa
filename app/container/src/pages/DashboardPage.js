@@ -1,11 +1,11 @@
 import React from 'react';
 import DashboardApp from '../apps/DashboardApp';
 
-function DashboardPage() {
+function DashboardPage(props) {
     return (
         <div>
             <section>
-                <DashboardApp />
+                <DashboardApp {...props} />
             </section>
         </div>
     )

@@ -14,7 +14,7 @@ const devConfig = {
         historyApiFallback: true
     },
     output: {
-        publicPath: 'auto',
+        publicPath: 'http://localhost:3002/',
     },
     plugins: [
         // To learn more about the usage of this plugin, please visit https://webpack.js.org/plugins/module-federation-plugin/

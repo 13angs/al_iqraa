@@ -1,11 +1,11 @@
 import React from 'react';
 import { mount } from 'dashboard/DashboardApp';
 
-function DashboardApp() {
+function DashboardApp({ theme }) {
     const appRef = React.useRef(null);
 
     React.useEffect(() => {
-        mount(appRef.current)
+        mount(appRef.current, { theme })
     })
     return (
         <div ref={appRef} />

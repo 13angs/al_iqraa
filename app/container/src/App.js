@@ -1,18 +1,27 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import DashboardPage from './pages/DashboardPage';
+import Suspenser from './components/Suspenser';
+import ThemeProvider from '@mui/material/styles/ThemeProvider';
+import CssBaseline from '@mui/material/CssBaseline';
+import defaultTheme from './themes/defaultTheme';
 
 function App() {
     return (
-        <div>
+        <ThemeProvider theme={defaultTheme} >
+            <CssBaseline />
             <BrowserRouter>
-                <Routes>
-                    <Route path='/dashboard' element={<DashboardPage />} />
-                    <Route path='/' element={<HomePage />} />
-                </Routes>
+                <React.Suspense fallback={<Suspenser />}>
+                    <Switch>
+                        <Route path='/dashboard'>
+                            <DashboardPage theme={defaultTheme} />
+                        </Route>
+                        <Route path='/' component={HomePage} />
+                    </Switch>
+                </React.Suspense>
             </BrowserRouter>
-        </div>
+        </ThemeProvider>
     )
 }
 

@@ -2,10 +2,11 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
 
-
-const mount = (el) => {
+// send or interact to container 
+// through this function
+const mount = (el, { theme }) => {
     const root = createRoot(el);
-    root.render(<App />)
+    root.render(<App theme={theme} />)
 }
 
 
