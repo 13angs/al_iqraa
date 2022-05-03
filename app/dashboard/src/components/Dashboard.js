@@ -1,11 +1,8 @@
 import styled from '@mui/material/styles/styled';
-
-
 import * as React from 'react';
 import PropTypes from 'prop-types';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
-import CssBaseline from '@mui/material/CssBaseline';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
@@ -19,6 +16,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
+import Paper from '@mui/material/Paper';
 
 const drawerWidth = 240;
 const StyledAppbar = styled(AppBar)(({ theme }) => ({
@@ -29,6 +27,35 @@ const StyledAppbar = styled(AppBar)(({ theme }) => ({
         borderRadius: `${theme.shape.borderRadius}px`
         // marginLeft: `${drawerWidth + 100}px`,
     }
+}))
+
+const StyledBread = styled('div')(({ theme }) => ({
+
+
+
+    [theme.breakpoints.up('md')]: {
+        display: 'flex',
+        alignItems: 'center',
+        margin: '14px 0px',
+        '& .page-title': {
+            fontSize: '25px',
+            color: theme.palette.text.secondary,
+            borderRight: `1px solid #D6DCE1`,
+            paddingRight: '12px',
+            fontWeight: theme.typography.fontWeightBold
+        },
+
+        '& .page-text': {
+            color: theme.palette.primary.main
+        }
+    }
+}))
+
+export const StyledPaper = styled(Paper)(({ theme }) => ({
+    maxWidth: '100%',
+    padding: theme.shape.borderRadius,
+    marginBottom: theme.shape.borderRadius
+    // overflowX: 'hidden',
 }))
 
 export function DashboardAppbar() {
@@ -60,27 +87,7 @@ export function DashboardAppbar() {
     )
 }
 
-const StyledBread = styled('div')(({ theme }) => ({
 
-
-
-    [theme.breakpoints.up('md')]: {
-        display: 'flex',
-        alignItems: 'center',
-        margin: '14px 0px',
-        '& .page-title': {
-            fontSize: '25px',
-            color: theme.palette.text.secondary,
-            borderRight: `1px solid #D6DCE1`,
-            paddingRight: '12px',
-            fontWeight: theme.typography.fontWeightBold
-        },
-
-        '& .page-text': {
-            color: theme.palette.primary.main
-        }
-    }
-}))
 export function DashboardBread({ title, icon, menu1, menu2, action }) {
     return (
         <StyledBread>
@@ -104,7 +111,14 @@ export function DashboardContent({ children }) {
     return (
         <Box
             component="main"
-            sx={{ flexGrow: 1, padding: '28px 14px 0px 14px', width: { sm: `calc(100 % - ${drawerWidth}px)` } }}
+            sx={{
+                [`&.MuiBox-root`]: theme => ({
+                    flexGrow: 1,
+                    padding: '28px 14px 0px 14px',
+                    maxWidth: { sm: `calc(100 % - ${drawerWidth}px)` },
+                    overflowX: 'hidden'
+                })
+            }}
         >
             <Toolbar />
             {children}

@@ -9,13 +9,15 @@ const prodConfig = {
     mode: 'production',
     output: {
         filename: '[name].[contenthash].js',
+        publicPath: '/'
     },
 
     plugins: [
         new ModuleFederationPlugin({
             name: 'container',
             remotes: {
-                'fragment': `fragment@http://${domain}/fragment/remoteEntry.js`
+                'fragment': `fragment@http://${domain}/fragment/remoteEntry.js`,
+                'dashboard': `dashboard@http://${domain}/dashboard/remoteEntry.js`,
             },
             shared: packageJson.dependencies
         })

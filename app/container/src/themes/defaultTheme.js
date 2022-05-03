@@ -8,6 +8,9 @@ const defaultTheme = createTheme({
         background: {
             default: '#F8F8F8'
         }
+    },
+    typography: {
+        fontFamily: ['Montserrat', 'Roboto'].join(',')
     }
 });
 export default defaultTheme;

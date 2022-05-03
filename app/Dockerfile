@@ -26,14 +26,18 @@ RUN apk update && \
     apk add --no-cache tzdata && \
     rm -rf /usr/share/nginx/html/* && \
     rm -rf /etc/nginx/conf.d/* && \
-    mkdir /usr/share/nginx/html/fragment
+    mkdir /usr/share/nginx/html/fragment \
+    /usr/share/nginx/html/dashboard
 
 ENV TZ=Asia/Bangkok
+
+ENV PRODUCTION_DOMAIN="posts.com"
 
 WORKDIR /usr/share/nginx/html
 
 COPY --from=builder /app/container/dist ./
 COPY --from=builder /app/fragment/dist ./fragment
+COPY --from=builder /app/fragment/dist ./dashboard
 
 COPY ./config/nginx/nginx.conf /etc/nginx/conf.d
 
