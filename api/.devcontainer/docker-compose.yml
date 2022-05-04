@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: ..
+      dockerfile: ./.devcontainer/Dockerfile
+      args:
+        VARIANT: "6.0"
+        NODE_VERSION: "lts/*"
+
+    volumes:
+      - ../..:/workspaces:cached
+      - /var/run/docker.sock:/var/run/docker.sock
+
+    command: sleep infinity
+
+    network_mode: service:db
+
+  db:
+    image: mariadb
+    restart: always
+    ports:
+      - "3306:3306"
+    volumes:
+      - iq_blog_db:/var/lib/mysql
+
+    environment:
+      MYSQL_ROOT_PASSWORD: P@ssw0rd
+
+  pma:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - "8080:80"
+    environment:
+      - PMA_ARBITRARY=1
+
+volumes:
+  iq_blog_db:
+    external:
+      name: iq_blog_db
