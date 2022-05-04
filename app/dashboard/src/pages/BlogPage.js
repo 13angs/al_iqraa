@@ -5,6 +5,8 @@ import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
+import * as signalR from '@microsoft/signalr';
+import Button from '@mui/material/Button';
 
 // icons
 import BookIcon from '@mui/icons-material/Book';
@@ -35,6 +37,66 @@ const Root = styled('div')(({ theme }) => ({
 }))
 
 function BlogPage() {
+    const [con, setCon] = React.useState(null);
+    const [text, setText] = React.useState({
+        title: '',
+        slug: ''
+    });
+
+    const connectToSignalR = React.useCallback(() => {
+        const connection = new signalR.HubConnectionBuilder().withUrl('http://localhost:5000/blogHub').build();
+
+        connection.start().then(() => {
+            console.log('connected')
+
+            // if connected then set the signalR
+            setCon(connection);
+
+        }).catch(err => {
+            console.log(err)
+        })
+    }, [setCon]);
+
+
+    const handleMsgReceived = React.useCallback(() => {
+        con.on("ReceiveMessage", (user, message) => {
+            let li = document.createElement('li');
+            document.getElementById('received-message').appendChild(li);
+            li.textContent = `Blog: ${user} with slug: ${message}`;
+        })
+    });
+
+
+
+    // initialize the signalR and set to the state
+    React.useEffect(() => {
+        connectToSignalR();
+    }, [connectToSignalR]);
+
+
+    // get or receive the data from signal r
+    React.useEffect(() => {
+
+        if (con) {
+            handleMsgReceived();
+        }
+    }, [con])
+
+
+    const handleSendMsg = (e) => {
+        con.invoke("SendMessage", text.title, text.slug)
+            .catch(err => {
+                return console.error(err.toString());
+            });
+        e.preventDefault();
+    }
+
+    const handleText = (key, value) => {
+        setText(prev => ({
+            ...prev,
+            [key]: value
+        }))
+    }
 
     return (
         <Root>
@@ -56,24 +118,49 @@ function BlogPage() {
                             variant="caption"
                         >21 dec 2022</Typography>
                     </div>
+                    <div style={{ display: 'flex', flexGrow: 1, justifyContent: 'flex-end' }}>
+                        <Typography>Sockect {con ? 'Connected' : 'Disconnected'}</Typography>
+                    </div>
                 </div>
 
                 <form className='blog-des-con'>
                     <Grid container spacing={2}>
                         <Grid item md={6}>
-                            <TextField size='small' fullWidth label='Title' />
+                            <TextField size='small' fullWidth label='Title'
+                                value={text.title}
+                                onChange={(e) => handleText('title', e.target.value)}
+                            />
                         </Grid>
                         <Grid item md={6}>
                             <TextField size='small' fullWidth label='Category' />
                         </Grid>
                         <Grid item md={6}>
-                            <TextField size='small' fullWidth label='Slug' />
+                            <TextField size='small' fullWidth label='Slug'
+                                value={text.slug}
+                                onChange={(e) => handleText('slug', e.target.value)}
+                            />
                         </Grid>
                         <Grid item md={6}>
                             <TextField size='small' fullWidth label='Status' />
                         </Grid>
                     </Grid>
                 </form>
+                <div className='action-btn' style={{ marginTop: '14px', display: 'flex', flexGrow: 1, justifyContent: 'flex-end' }}>
+                    <Button variant="outlined"
+                        disabled={!con ? true : false}
+                        onClick={handleSendMsg}
+                    >
+                        Submit
+                    </Button>
+                </div>
+
+
+                {/* Received message here */}
+                <div>
+                    <ul id='received-message'>
+
+                    </ul>
+                </div>
             </StyledPaper>
         </Root>
     )
