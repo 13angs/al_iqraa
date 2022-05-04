@@ -1,4 +1,6 @@
+using blog.Interfaces;
 using blog.Models;
+using blog.Services;
 using Microsoft.EntityFrameworkCore;
 
 
@@ -34,6 +36,12 @@ builder.Services.AddDbContextPool<IQContext>(options =>
         ServerVersion.AutoDetect(IqConStr)
     );
 });
+
+// regiser all the dependency injections
+builder.Services.AddScoped<IBlog, BlogServices>();
+
+// register auto mappers
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
 var app = builder.Build();
 
