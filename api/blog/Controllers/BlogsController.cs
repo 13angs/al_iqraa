@@ -1,6 +1,7 @@
 using blog.DTOs;
 using blog.Interfaces;
 using blog.Models;
+using blog.Params;
 using Microsoft.AspNetCore.Mvc;
 
 namespace blog.Controllers
@@ -19,8 +20,16 @@ namespace blog.Controllers
         [HttpPost]
         public async Task<ActionResult<Blog>> AddBlog([FromBody] AddBlogModel model)
         {
-            Blog blog = await blogService.AddBlog(model);
+            Blog blog = await blogService.Create(model);
             return Ok(blog);
+        }
+
+        [HttpGet]
+        public ActionResult<IEnumerable<GetBlogModel>> Get([FromQuery] GetBlogParam param)
+        {
+            IEnumerable<GetBlogModel> models = blogService.Get(param);
+
+            return Ok(models);
         }
     }
 }

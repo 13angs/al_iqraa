@@ -17,6 +17,16 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Paper from '@mui/material/Paper';
+import Badge from '@mui/material/Badge';
+import BlogService from '../services/blog/BlogService';
+
+
+// context
+import blogContext from '../contexts/blogContext';
+
+
+// icons
+import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 
 const drawerWidth = 240;
 const StyledAppbar = styled(AppBar)(({ theme }) => ({
@@ -59,11 +69,41 @@ export const StyledPaper = styled(Paper)(({ theme }) => ({
 }))
 
 export function DashboardAppbar() {
+    const { connection } = React.useContext(blogContext);
     const [mobileOpen, setMobileOpen] = React.useState(false);
+    const [data, setData] = React.useState([]);
 
     const handleDrawerToggle = () => {
         setMobileOpen(!mobileOpen);
     };
+
+    const getBlogs = React.useCallback(() => {
+        const blogSV = new BlogService();
+        blogSV.getBlogs('blogs', { action: '', status: '' })
+            .then(res => {
+                setData(res.data);
+            })
+    }, [setData])
+
+    // fetch all the blogs
+    React.useEffect(() => {
+        getBlogs();
+    }, [getBlogs]);
+
+    // refetch the data
+    // when socket is triggered
+    const handleSocketUpdate = React.useCallback(() => {
+        if (connection) {
+            connection.on('ReceiveMessage', (user, message) => {
+                // refetch the blog
+                getBlogs();
+            })
+        }
+    }, [connection]);
+
+    React.useEffect(() => {
+        handleSocketUpdate();
+    }, [handleSocketUpdate]);
 
     return (
         <StyledAppbar
@@ -82,6 +122,13 @@ export function DashboardAppbar() {
                 <Typography variant="h6" noWrap component="div">
                     Responsive drawer
                 </Typography>
+                <div style={{ display: 'flex', flexGrow: 1, justifyContent: 'flex-end' }}>
+                    <Badge badgeContent={data.length} color="secondary">
+                        <IconButton>
+                            <NotificationsActiveIcon sx={{ color: theme => theme.palette.background.paper }} />
+                        </IconButton>
+                    </Badge>
+                </div>
             </Toolbar>
         </StyledAppbar>
     )

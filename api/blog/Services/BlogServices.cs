@@ -2,6 +2,7 @@ using AutoMapper;
 using blog.DTOs;
 using blog.Interfaces;
 using blog.Models;
+using blog.Params;
 
 namespace blog.Services
 {
@@ -15,7 +16,7 @@ namespace blog.Services
             this.mapper = mapper;
             this.dbContext = dbContext;
         }
-        public async Task<Blog> AddBlog(AddBlogModel model)
+        public async Task<Blog> Create(AddBlogModel model)
         {
             try
             {
@@ -46,6 +47,24 @@ namespace blog.Services
             throw new NullReferenceException();
         }
 
+        public IEnumerable<GetBlogModel> Get(GetBlogParam param)
+        {
+            IEnumerable<Blog> blogs = new List<Blog>();
 
+            if (String.IsNullOrEmpty(param.Action) && String.IsNullOrEmpty(param.Status))
+                blogs = dbContext.IQBlogs;
+            else
+            {
+                blogs = dbContext.IQBlogs
+                    .Where(b => b.Action == param.Action
+                        && b.Status == param.Status
+                    );
+            }
+
+            IEnumerable<GetBlogModel> models = new List<GetBlogModel>();
+            models = mapper.Map(blogs, models);
+
+            return models;
+        }
     }
 }

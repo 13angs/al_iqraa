@@ -4,6 +4,7 @@ import DashboardPage from './pages/DashboardPage';
 import Suspenser from './components/Suspenser';
 import ProviderTheme from '@mui/material/styles/ThemeProvider';
 import CssBaseline from '@mui/material/CssBaseline';
+import BlogProvider from './contexts/providers/BlogProvider';
 
 
 // lazy import
@@ -13,17 +14,19 @@ function App({ theme }) {
     return (
         <ProviderTheme theme={theme}>
             <CssBaseline />
-            <BrowserRouter>
-                <React.Suspense fallback={<Suspenser />}>
-                    <Switch>
-                        <Route path='/dashboard'>
-                            <DashboardPage>
-                                <Route path="/dashboard/blogs" component={BlogPage} />
-                            </DashboardPage>
-                        </Route>
-                    </Switch>
-                </React.Suspense>
-            </BrowserRouter>
+            <BlogProvider>
+                <BrowserRouter>
+                    <React.Suspense fallback={<Suspenser />}>
+                        <Switch>
+                            <Route path='/dashboard'>
+                                <DashboardPage>
+                                    <Route path="/dashboard/blogs" component={BlogPage} />
+                                </DashboardPage>
+                            </Route>
+                        </Switch>
+                    </React.Suspense>
+                </BrowserRouter>
+            </BlogProvider>
         </ProviderTheme>
     )
 }

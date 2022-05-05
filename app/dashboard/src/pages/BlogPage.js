@@ -5,9 +5,13 @@ import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
-import * as signalR from '@microsoft/signalr';
 import Button from '@mui/material/Button';
 import Editor from '../components/Editor';
+import BlogService from '../services/blog/BlogService';
+// import * as signalR from '@microsoft/signalr';
+
+// context
+import blogContext from '../contexts/blogContext';
 
 // icons
 import BookIcon from '@mui/icons-material/Book';
@@ -39,29 +43,19 @@ const Root = styled('div')(({ theme }) => ({
 }))
 
 function BlogPage() {
-    const [con, setCon] = React.useState(null);
+    // const [con, setCon] = React.useState(null);
+
+    const { connection } = React.useContext(blogContext);
     const [text, setText] = React.useState({
         title: '',
-        slug: ''
+        slug: '',
+        category: '',
+        status: ''
     });
-
-    const connectToSignalR = React.useCallback(() => {
-        const connection = new signalR.HubConnectionBuilder().withUrl('http://localhost:5000/blogHub').build();
-
-        connection.start().then(() => {
-            console.log('connected')
-
-            // if connected then set the signalR
-            setCon(connection);
-
-        }).catch(err => {
-            console.log(err)
-        })
-    }, [setCon]);
 
 
     const handleMsgReceived = React.useCallback(() => {
-        con.on("ReceiveMessage", (user, message) => {
+        connection.on("ReceiveMessage", (user, message) => {
             let li = document.createElement('li');
             document.getElementById('received-message').appendChild(li);
             li.textContent = `Blog: ${user} with slug: ${message}`;
@@ -69,56 +63,43 @@ function BlogPage() {
     });
 
 
-
-    // initialize the signalR and set to the state
-    React.useEffect(() => {
-        connectToSignalR();
-    }, [connectToSignalR]);
-
-
     // get or receive the data from signal r
     React.useEffect(() => {
 
-        if (con) {
+        if (connection) {
             handleMsgReceived();
         }
-    }, [con])
-
-
-    const handleSendMsg = (e) => {
-        con.invoke("SendMessage", text.title, text.slug)
-            .catch(err => {
-                return console.error(err.toString());
-            });
-        e.preventDefault();
-    }
+    }, [connection])
 
     const handleText = (key, value) => {
         setText(prev => ({
             ...prev,
             [key]: value
         }))
+
     }
 
-    // React.useEffect(() => {
-    //     const script = document.getElementById('quill-script');
-    //     console.log(script);
-    //     if (script) {
-    //         const Quill = window.Quill;
-    //         console.log(Quill)
-    //     }
-    // })
 
-    const initEditor = React.useCallback((ref) => {
-        if (ref === null) { return }
-
-        const Quill = window.Quill;
-        if (Quill) {
-            var quill = new Quill(ref, {
-                theme: 'snow'
-            });
-        }
-    })
+    // save change the blog
+    const handleBlogSubmit = (e) => {
+        e.preventDefault();
+        const blogSV = new BlogService();
+        blogSV.addBlog({
+            title: text.title,
+            category: text.category,
+            slug: text.slug,
+            status: text.status
+        }).then(res => {
+            // if data save successfully
+            // invoke the socket server
+            if (res.status === 200) {
+                connection.invoke("SendMessage", text.title, text.slug)
+                    .catch(err => {
+                        return console.error(err.toString());
+                    });
+            }
+        });
+    }
 
     return (
         <Root>
@@ -142,11 +123,11 @@ function BlogPage() {
                         >21 dec 2022</Typography>
                     </div>
                     <div style={{ display: 'flex', flexGrow: 1, justifyContent: 'flex-end' }}>
-                        <Typography>Sockect {con ? 'Connected' : 'Disconnected'}</Typography>
+                        <Typography>Sockect {connection ? 'Connected' : 'Disconnected'}</Typography>
                     </div>
                 </div>
 
-                <form className='blog-des-con'>
+                <form className='blog-des-con' onSubmit={handleBlogSubmit}>
                     <Grid container spacing={2}>
                         <Grid item md={6}>
                             <TextField size='small' fullWidth label='Title'
@@ -155,7 +136,10 @@ function BlogPage() {
                             />
                         </Grid>
                         <Grid item md={6}>
-                            <TextField size='small' fullWidth label='Category' />
+                            <TextField size='small' fullWidth label='Category'
+                                value={text.category}
+                                onChange={(e) => handleText('category', e.target.value)}
+                            />
                         </Grid>
                         <Grid item md={6}>
                             <TextField size='small' fullWidth label='Slug'
@@ -164,7 +148,10 @@ function BlogPage() {
                             />
                         </Grid>
                         <Grid item md={6}>
-                            <TextField size='small' fullWidth label='Status' />
+                            <TextField size='small' fullWidth label='Status'
+                                value={text.status}
+                                onChange={(e) => handleText('status', e.target.value)}
+                            />
                         </Grid>
 
                         <Grid item md={12}>
@@ -173,9 +160,9 @@ function BlogPage() {
                                 <Editor id='blog' onChange={(delta) => console.log(delta)}
                                     value={{
                                         ops: [
-                                            { insert: 'Gandalf', attributes: { bold: true } },
-                                            { insert: ' the ' },
-                                            { insert: 'Grey', attributes: { color: '#cccccc' } }
+                                            { insert: 'Type', attributes: { bold: true } },
+                                            { insert: ' the text ' },
+                                            { insert: 'Here', attributes: { color: '#cccccc' } }
                                         ]
                                     }}
                                 />
@@ -183,23 +170,17 @@ function BlogPage() {
 
                         </Grid>
                     </Grid>
+                    <div className='action-btn' style={{ marginTop: '14px', display: 'flex', flexGrow: 1, justifyContent: 'flex-end' }}>
+                        <Button variant="outlined"
+                            disabled={!connection ? true : false}
+                            // onClick={handleSendMsg}
+                            type='submit'
+                        >
+                            Submit
+                        </Button>
+                    </div>
                 </form>
-                <div className='action-btn' style={{ marginTop: '14px', display: 'flex', flexGrow: 1, justifyContent: 'flex-end' }}>
-                    <Button variant="outlined"
-                        disabled={!con ? true : false}
-                        onClick={handleSendMsg}
-                    >
-                        Submit
-                    </Button>
-                </div>
 
-
-                {/* Received message here */}
-                <div>
-                    <ul id='received-message'>
-
-                    </ul>
-                </div>
             </StyledPaper>
             {/* {addScriptTag('https://cdn.quilljs.com/1.3.6/quill.js', 'quill-script')} */}
             <script>

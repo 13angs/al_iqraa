@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using blog.Models;
 
@@ -10,9 +11,10 @@ using blog.Models;
 namespace blog.Migrations
 {
     [DbContext(typeof(IQContext))]
-    partial class IQContextModelSnapshot : ModelSnapshot
+    [Migration("20220505165945_add-blog-action")]
+    partial class addblogaction
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

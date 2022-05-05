@@ -10,6 +10,9 @@ namespace blog.Profiles
         {
             CreateMap<Blog, AddBlogModel>()
                 .ReverseMap();
+
+            CreateMap<Blog, GetBlogModel>()
+                .ReverseMap();
         }
     }
 }
