@@ -11,6 +11,10 @@ import Button from '@mui/material/Button';
 // icons
 import BookIcon from '@mui/icons-material/Book';
 
+// services
+import addScriptTag from '../services/element/addScriptTag';
+import addLinkTag from '../services/element/addLinkTag';
+
 const Root = styled('div')(({ theme }) => ({
     [theme.breakpoints.up('md')]: {
         width: '100%',
@@ -98,8 +102,29 @@ function BlogPage() {
         }))
     }
 
+    // React.useEffect(() => {
+    //     const script = document.getElementById('quill-script');
+    //     console.log(script);
+    //     if (script) {
+    //         const Quill = window.Quill;
+    //         console.log(Quill)
+    //     }
+    // })
+
+    const initEditor = React.useCallback((ref) => {
+        if (ref === null) { return }
+
+        const Quill = window.Quill;
+        if (Quill) {
+            var quill = new Quill(ref, {
+                theme: 'snow'
+            });
+        }
+    })
+
     return (
         <Root>
+            {addLinkTag('https://cdn.quilljs.com/1.3.6/quill.snow.css', 'quill-styles')}
             <DashboardBread
                 title="Blog Edit"
                 icon={<BookIcon />}
@@ -143,6 +168,12 @@ function BlogPage() {
                         <Grid item md={6}>
                             <TextField size='small' fullWidth label='Status' />
                         </Grid>
+
+                        <Grid item md={12}>
+                            <div>
+                                <div ref={initEditor} />
+                            </div>
+                        </Grid>
                     </Grid>
                 </form>
                 <div className='action-btn' style={{ marginTop: '14px', display: 'flex', flexGrow: 1, justifyContent: 'flex-end' }}>
@@ -162,6 +193,10 @@ function BlogPage() {
                     </ul>
                 </div>
             </StyledPaper>
+            {addScriptTag('https://cdn.quilljs.com/1.3.6/quill.js', 'quill-script')}
+            <script>
+                window.Quill = Quill;
+            </script>
         </Root>
     )
 }
