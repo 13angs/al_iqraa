@@ -2,7 +2,7 @@ import createTheme from '@mui/material/styles/createTheme';
 
 const defaultTheme = createTheme({
     shape: {
-        borderRadius: 14
+        borderRadius: 8
     },
     palette: {
         background: {

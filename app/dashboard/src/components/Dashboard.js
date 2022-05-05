@@ -22,7 +22,7 @@ const drawerWidth = 240;
 const StyledAppbar = styled(AppBar)(({ theme }) => ({
     [`&.MuiAppBar-root`]: {
         position: 'fixed',
-        width: `calc(100% - ${drawerWidth + theme.shape.borderRadius * 2}px)`,
+        width: `calc(100% - ${drawerWidth + 14 * 2}px)`,
         margin: `14px 14px 14px ${drawerWidth + 14}px`,
         borderRadius: `${theme.shape.borderRadius}px`
         // marginLeft: `${drawerWidth + 100}px`,
@@ -53,7 +53,7 @@ const StyledBread = styled('div')(({ theme }) => ({
 
 export const StyledPaper = styled(Paper)(({ theme }) => ({
     maxWidth: '100%',
-    padding: theme.shape.borderRadius,
+    padding: '14px',
     marginBottom: theme.shape.borderRadius
     // overflowX: 'hidden',
 }))

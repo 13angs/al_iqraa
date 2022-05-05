@@ -7,13 +7,11 @@ import Grid from '@mui/material/Grid';
 import TextField from '@mui/material/TextField';
 import * as signalR from '@microsoft/signalr';
 import Button from '@mui/material/Button';
+import Editor from '../components/Editor';
 
 // icons
 import BookIcon from '@mui/icons-material/Book';
 
-// services
-import addScriptTag from '../services/element/addScriptTag';
-import addLinkTag from '../services/element/addLinkTag';
 
 const Root = styled('div')(({ theme }) => ({
     [theme.breakpoints.up('md')]: {
@@ -124,7 +122,7 @@ function BlogPage() {
 
     return (
         <Root>
-            {addLinkTag('https://cdn.quilljs.com/1.3.6/quill.snow.css', 'quill-styles')}
+            {/* {addLinkTag('https://cdn.quilljs.com/1.3.6/quill.snow.css', 'quill-styles')} */}
             <DashboardBread
                 title="Blog Edit"
                 icon={<BookIcon />}
@@ -170,9 +168,19 @@ function BlogPage() {
                         </Grid>
 
                         <Grid item md={12}>
+                            {/* <div ref={initEditor} /> */}
                             <div>
-                                <div ref={initEditor} />
+                                <Editor id='blog' onChange={(delta) => console.log(delta)}
+                                    value={{
+                                        ops: [
+                                            { insert: 'Gandalf', attributes: { bold: true } },
+                                            { insert: ' the ' },
+                                            { insert: 'Grey', attributes: { color: '#cccccc' } }
+                                        ]
+                                    }}
+                                />
                             </div>
+
                         </Grid>
                     </Grid>
                 </form>
@@ -193,7 +201,7 @@ function BlogPage() {
                     </ul>
                 </div>
             </StyledPaper>
-            {addScriptTag('https://cdn.quilljs.com/1.3.6/quill.js', 'quill-script')}
+            {/* {addScriptTag('https://cdn.quilljs.com/1.3.6/quill.js', 'quill-script')} */}
             <script>
                 window.Quill = Quill;
             </script>
