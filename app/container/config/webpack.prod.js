@@ -3,21 +3,21 @@ const ModuleFederationPlugin = require('webpack/lib/container/ModuleFederationPl
 const commonConfig = require('./webpack.common');
 const packageJson = require('../package.json');
 
-const domain = process.env.PRODUCTION_DOMAIN || 'localhost:3000';
+const domain = process.env.PRODUCTION_DOMAIN || 'localhost';
 
 const prodConfig = {
     mode: 'production',
     output: {
         filename: '[name].[contenthash].js',
-        publicPath: '/'
+        publicPath: 'http://localhost:3000/'
     },
 
     plugins: [
         new ModuleFederationPlugin({
             name: 'container',
             remotes: {
-                'fragment': `fragment@http://${domain}/fragment/remoteEntry.js`,
-                'dashboard': `dashboard@http://${domain}/dashboard/remoteEntry.js`,
+                'fragment': `fragment@http://${domain}:3001/remoteEntry.js`,
+                'dashboard': `dashboard@http://${domain}:3002/remoteEntry.js`,
             },
             shared: packageJson.dependencies
         })
