@@ -15,6 +15,9 @@ spec:
         containers:
           - name: blog
             image: 13angs/iq_api_blog
+            # env:
+            # - name: BlogStoreDatabase:ConnectionString
+            #   value: mongodb://blog-mongo-srv:27017
 
 ---
 apiVersion: v1

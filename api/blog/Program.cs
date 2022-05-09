@@ -33,30 +33,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// resgister dbcontext
-builder.Services.AddDbContextPool<IQContext>(options =>
-{
-    // abstract all the connection string
-    // for easy to change when in runtime
-    string Server = configuration["MariaDb:Server"];
-    string Port = configuration["MariaDb:Port"];
-    string Password = configuration["MariaDb:Password"];
-    string Database = configuration["MariaDb:Database"];
-    string UserId = configuration["MariaDb:UserId"];
+builder.Services.Configure<BlogStoreDbSettings>(
+    builder.Configuration.GetSection("BlogStoreDatabase")
+);
 
-    string IqConStr = string.Format(
-        "server={0},{1}; user id={2}; database={3}; password={4}",
-        Server, Port, UserId, Database, Password
-    );
+builder.Services.AddSingleton<BlogService>();
 
-    options.UseMySql(
-        IqConStr,
-        ServerVersion.AutoDetect(IqConStr)
-    );
-});
-
-// regiser all the dependency injections
-builder.Services.AddScoped<IBlog, BlogServices>();
 
 // register auto mappers
 builder.Services.AddAutoMapper(typeof(Program).Assembly);

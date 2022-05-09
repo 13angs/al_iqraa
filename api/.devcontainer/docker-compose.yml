@@ -18,16 +18,12 @@ services:
     network_mode: service:db
 
   db:
-    image: mariadb
+    image: mongo
     restart: always
     ports:
-      - "3306:3306"
+      - "27017:27017"
     volumes:
-      - iq_blog_db:/var/lib/mysql
-
-    environment:
-      MYSQL_ROOT_PASSWORD: P@ssw0rd
-
+      - iq_blog_db:/data/db
   pma:
     image: phpmyadmin
     restart: always

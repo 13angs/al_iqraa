@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: ..
+      dockerfile: ./.devcontainer/Dockerfile
+      args:
+        VARIANT: "6.0"
+        NODE_VERSION: "lts/*"
+
+    volumes:
+      - ..:/workspaces:cached
+      - /var/run/docker.sock:/var/run/docker.sock
+
+    command: sleep infinity
+
+    network_mode: service:db
+
+  db:
+    image: mongo
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - iq_comment_db:/data/db
+
+volumes:
+  iq_comment_db:
+    external:
+      name: iq_comment_db

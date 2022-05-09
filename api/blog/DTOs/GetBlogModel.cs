@@ -2,7 +2,7 @@ namespace blog.DTOs
 {
     public class GetBlogModel
     {
-        public int Id { get; set; }
+        public string Id { get; set; } = string.Empty;
         public string Status { get; set; } = string.Empty;
         public string Uuid { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;

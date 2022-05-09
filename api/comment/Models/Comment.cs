@@ -9,15 +9,16 @@ namespace comment.Models
 
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
+        [BsonElement("id")]
         public string Id { get; set; } = String.Empty;
 
-        [BsonElement("Description")]
+        [BsonElement("description")]
         public string Description { get; set; } = String.Empty;
 
         [BsonElement("blog_id")]
         public int BlogId { get; set; }
 
-        [BsonElement("Status")]
+        [BsonElement("status")]
         public string Status { get; set; } = String.Empty;
 
     }
