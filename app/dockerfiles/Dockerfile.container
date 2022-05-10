@@ -29,13 +29,15 @@ RUN apk update && \
 
 ENV TZ=Asia/Bangkok
 
+ENV PRODUCTION_DOMAIN=http://al-iqraa.com
+
 WORKDIR /usr/share/nginx/html
 
 COPY --from=builder /app/container/dist ./
 
-COPY ./dockerfiles/nginx/nginx.conf /etc/nginx/conf.d
+COPY ./dockerfiles/nginx/container/nginx.conf /etc/nginx/conf.d
 
-EXPOSE 80
+EXPOSE 3000
 
 CMD ["nginx", "-g", "daemon off;"]
 

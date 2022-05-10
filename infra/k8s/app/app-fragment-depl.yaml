@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-fragment-depl 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-fragment
+  template:
+    metadata:
+      labels:
+        app: app-fragment
+    spec:
+      containers:
+        - name: app-fragment
+          image: 13angs/al_iqraa_app_fragment
+          env:
+            - name: PRODUCTION_DOMAIN
+              value: http://al-iqraa.com
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-fragment-srv 
+spec:
+  selector:
+    app: app-fragment
+  ports:
+    - port: 3001
+      name: app-fragments 
+      protocol: TCP
+      targetPort: 3001

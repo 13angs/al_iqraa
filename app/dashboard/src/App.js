@@ -18,9 +18,9 @@ function App({ theme }) {
                 <BrowserRouter>
                     <React.Suspense fallback={<Suspenser />}>
                         <Switch>
-                            <Route path='/dashboard'>
+                            <Route path='/console'>
                                 <DashboardPage>
-                                    <Route path="/dashboard/blogs" component={BlogPage} />
+                                    <Route path="/console/blogs" component={BlogPage} />
                                 </DashboardPage>
                             </Route>
                         </Switch>

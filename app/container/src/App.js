@@ -14,7 +14,7 @@ function App() {
             <BrowserRouter>
                 <React.Suspense fallback={<Suspenser />}>
                     <Switch>
-                        <Route path='/dashboard'>
+                        <Route path='/console'>
                             <DashboardPage theme={defaultTheme} />
                         </Route>
                         <Route path='/' component={HomePage} />

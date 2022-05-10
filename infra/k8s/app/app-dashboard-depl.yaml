@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-dashboard-depl 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-dashboard
+  template:
+    metadata:
+      labels:
+        app: app-dashboard
+    spec:
+      containers:
+        - name: app-dashboard
+          image: 13angs/al_iqraa_app_dashboard
+          env:
+            - name: PRODUCTION_DOMAIN
+              value: http://al-iqraa.com
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-dashboard-srv 
+spec:
+  selector:
+    app: app-dashboard
+  ports:
+    - port: 3002
+      name: app-dashboards 
+      protocol: TCP
+      targetPort: 3002

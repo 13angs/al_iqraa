@@ -7,7 +7,7 @@ const prodConfig = {
     mode: 'production',
     output: {
         filename: '[name].[contenthash].js',
-        publicPath: 'http://localhost:3001/'
+        publicPath: '/fragment/'
     },
 
     plugins: [

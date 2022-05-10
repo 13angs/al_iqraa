@@ -33,9 +33,9 @@ WORKDIR /usr/share/nginx/html
 
 COPY --from=builder /app/fragment/dist ./
 
-COPY ./dockerfiles/nginx/nginx.conf /etc/nginx/conf.d
+COPY ./dockerfiles/nginx/fragment/nginx.conf /etc/nginx/conf.d
 
-EXPOSE 80
+EXPOSE 3001
 
 CMD ["nginx", "-g", "daemon off;"]
 

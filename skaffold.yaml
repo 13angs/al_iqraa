@@ -9,7 +9,7 @@ build:
   local:
     push: false
   artifacts:
-    - image: 13angs/iq_api_blog
+    - image: 13angs/al_iqraa_api_blog
       context: api/blog
       docker:
         dockerfile: Dockerfile
@@ -17,4 +17,31 @@ build:
         manual:
           - dest: .
             src: "**/*.cs"
+
+    - image: 13angs/al_iqraa_app_container
+      context: app
+      docker:
+        dockerfile: ./dockerfiles/Dockerfile.container
+      sync:
+        manual:
+          - dest: .
+            src: "**/*.js"
+    
+    - image: 13angs/al_iqraa_app_fragment
+      context: app
+      docker:
+        dockerfile: ./dockerfiles/Dockerfile.fragment
+      sync:
+        manual:
+          - dest: .
+            src: "**/*.js"
+
+    - image: 13angs/al_iqraa_app_dashboard
+      context: app
+      docker:
+        dockerfile: ./dockerfiles/Dockerfile.dashboard
+      sync:
+        manual:
+          - dest: .
+            src: "**/*.js"
   
