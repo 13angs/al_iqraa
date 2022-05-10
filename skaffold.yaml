@@ -17,6 +17,15 @@ build:
         manual:
           - dest: .
             src: "**/*.cs"
+    
+    - image: 13angs/al_iqraa_api_hub
+      context: api/hub
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - dest: .
+            src: "**/*.cs"
 
     - image: 13angs/al_iqraa_app_container
       context: app
@@ -25,7 +34,7 @@ build:
       sync:
         manual:
           - dest: .
-            src: "**/*.js"
+            src: "app/container/**/*.js"
     
     - image: 13angs/al_iqraa_app_fragment
       context: app
@@ -34,7 +43,7 @@ build:
       sync:
         manual:
           - dest: .
-            src: "**/*.js"
+            src: "app/fragment/**/*.js"
 
     - image: 13angs/al_iqraa_app_dashboard
       context: app
@@ -43,5 +52,5 @@ build:
       sync:
         manual:
           - dest: .
-            src: "**/*.js"
+            src: "app/dashboard/**/*.js"
   

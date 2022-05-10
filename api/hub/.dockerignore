@@ -1,0 +1,6 @@
+.devcontainer
+.history
+bin
+.vscode
+obj
+.gitignore

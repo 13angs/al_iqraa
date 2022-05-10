@@ -22,8 +22,8 @@ const prodConfig = {
         }),
 
         new webpack.EnvironmentPlugin({
-            HOST: 'http://localhost:5000',
-            HUB_NAME: 'blogHub'
+            HOST: 'http://al-iqraa.com',
+            HUB_NAME: 'hubs'
         })
     ]
 }
