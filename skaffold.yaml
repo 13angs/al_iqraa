@@ -1,3 +1,6 @@
+# kubernetes rely on docker remote docker
+# so you need to update the repo in dockerhub
+# in order to update the local project
 apiVersion: skaffold/v2alpha3
 kind: Config
 deploy:
@@ -16,7 +19,7 @@ build:
       sync:
         manual:
           - dest: .
-            src: "**/*.cs"
+            src: "api/blog/**/*.cs"
     
     - image: 13angs/al_iqraa_api_hub
       context: api/hub
@@ -25,9 +28,18 @@ build:
       sync:
         manual:
           - dest: .
-            src: "**/*.cs"
+            src: "api/hub/**/*.cs"
+    
+    - image: 13angs/al_iqraa_api_auth
+      context: api/auth
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual: 
+          - dest: .
+            src: "api/auth/**/*.ts"
 
-    - image: 13angs/al_iqraa_app_container
+    - image: 13angs/al_iqraa_api_container
       context: app
       docker:
         dockerfile: ./dockerfiles/Dockerfile.container

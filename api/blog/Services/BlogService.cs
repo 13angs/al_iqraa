@@ -67,6 +67,7 @@ namespace blog.Services
             IEnumerable<GetBlogModel> models = new List<GetBlogModel>();
 
             models = mapper.Map<IEnumerable<Blog>, IEnumerable<GetBlogModel>>(blogs);
+            System.Console.Write(models);
 
             return models;
 

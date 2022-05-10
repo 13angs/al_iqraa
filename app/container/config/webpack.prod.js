@@ -20,6 +20,7 @@ const prodConfig = {
                 'dashboard': `dashboard@${domain}/dashboard/remoteEntry.js`,
             },
             shared: packageJson.dependencies
+            
         })
     ]
 }
