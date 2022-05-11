@@ -1,0 +1,30 @@
+apiVersion: apps/v1 
+kind: Deployment
+metadata:
+  name: db-auth-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:  
+      app: db-auth
+  template:
+    metadata:
+      labels:
+        app: db-auth
+    spec:
+      containers:
+        - name: db-auth
+          image: mongo
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: db-auth-srv
+spec:
+  selector:
+    app: db-auth
+  ports:
+    - name: db-auth
+      port: 27017
+      targetPort: 27017
+      protocol: TCP
