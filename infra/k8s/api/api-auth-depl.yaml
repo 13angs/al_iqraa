@@ -15,6 +15,18 @@ spec:
       containers:
         - name: api-auth
           image: 13angs/al_iqraa_api_auth
+          env:
+          - name: COLLECTION_NAME
+            value: "AL_IQRAA_AUTH_DB"
+          - name: DATABASE_DOMAIN
+            value: "db-auth-srv"
+          - name: DATABASE_PORT
+            value: "27017"
+          - name: JWT_KEY
+            valueFrom:
+              secretKeyRef:
+                name: jwt-secret
+                key: JWT_KEY
 
 ---
 apiVersion: v1 

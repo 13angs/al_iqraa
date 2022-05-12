@@ -6,6 +6,7 @@ import express from 'express';
 import 'express-async-errors';
 import { json } from 'body-parser';
 import mongoose from 'mongoose';
+import cookieSession from 'cookie-session';
 
 import { currentUserRouter } from './routes/current-user';
 import { signinRouter } from './routes/signin';
@@ -15,7 +16,14 @@ import { errorHandler } from './middlewares/error-handler';
 import { NotFoundError } from './errors/not-found-error';
 
 const app = express();
+app.set('trust proxy', true);
 app.use(json());
+app.use(
+    cookieSession({
+        signed: false,
+        secure: false
+    })
+);
 
 app.use(currentUserRouter);
 app.use(signinRouter);
@@ -38,8 +46,17 @@ app.use(errorHandler);
 
 // connecto to mongo db
 const start = async () => {
+    if (!process.env.JWT_KEY) {
+        throw new Error('JWT_KEY must be defined');
+    }
+
     try {
-        await mongoose.connect('mongodb://db-auth-srv:27017/AL_IQRAA_AUTH_DB')
+        // AL_IQRAA_AUTH_DB
+        const collectionName = process.env.COLLECTION_NAME;
+        const databaseDomain = process.env.DATABASE_DOMAIN;
+        const databasePort = process.env.DATABASE_PORT;
+
+        await mongoose.connect(`mongodb://${databaseDomain}:${databasePort}/${collectionName}`)
         console.log('connected to mongodb')
     } catch (err) {
         console.error(err);

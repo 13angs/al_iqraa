@@ -1,8 +1,10 @@
 import express, { Request, Response } from 'express';
 import { body, validationResult } from 'express-validator';
-import { DatabaseConnectionError } from '../errors/database-connection-error';
 import { RequestValidationError } from '../errors/request-validation-error';
 import { User } from '../models/users';
+import jwt from 'jsonwebtoken';
+import { BadRequestError } from '../errors/bad-request-error';
+// import { DatabaseConnectionError } from '../errors/database-connection-error';
 
 const router = express.Router();
 
@@ -35,8 +37,7 @@ router.post('/api/v1/auth/signup', [
 
     // if not null
     if (existingUser) {
-        console.log('User is in used');
-        return res.send({});
+        throw new BadRequestError('Email in use');
     }
 
     // else create new user
@@ -46,6 +47,20 @@ router.post('/api/v1/auth/signup', [
     });
 
     await user.save();
+
+    // generate JWT
+    const userJWT = jwt.sign({
+        id: user.id,
+        email: user.email
+    },
+        process.env.JWT_KEY!
+    );
+
+    // store jwt in session
+    // use object to avoid error
+    req.session = {
+        jwt: userJWT
+    }
 
     res.status(201).send(user);
 });
