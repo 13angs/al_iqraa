@@ -39,7 +39,7 @@ build:
           - dest: .
             src: "api/auth/**/*.ts"
 
-    - image: 13angs/al_iqraa_api_container
+    - image: 13angs/al_iqraa_app_container
       context: app
       docker:
         dockerfile: ./dockerfiles/Dockerfile.container
