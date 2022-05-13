@@ -1,11 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
 
+// augmenting the type definition
+// for not builtin type
 interface UserPayload {
     id: string;
     email: string;
 }
-
 declare global {
     namespace Express {
         interface Request {
