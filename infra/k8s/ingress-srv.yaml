@@ -35,19 +35,11 @@ spec:
               port:
                 number: 5100
 
-        - path: /dashboard
+        - path: /console
           pathType: Prefix
           backend:
             service:
               name: app-dashboard-srv
-              port:
-                number: 3002
-
-        - path: /fragment
-          pathType: Prefix
-          backend:
-            service:
-              name: app-fragment-srv
               port:
                 number: 3001
 
@@ -55,7 +47,7 @@ spec:
           pathType: Prefix
           backend:
             service:
-              name: app-container-srv
+              name: app-home-srv
               port:
                 number: 3000
           
