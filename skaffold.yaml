@@ -1,7 +1,7 @@
 # kubernetes rely on docker remote docker
 # so you need to update the repo in dockerhub
 # in order to update the local project
-apiVersion: skaffold/v2alpha3
+apiVersion: skaffold/v2beta28
 kind: Config
 deploy:
   kubectl:
@@ -39,30 +39,26 @@ build:
           - dest: .
             src: "api/auth/**/*.ts"
 
-    - image: 13angs/al_iqraa_app_container
-      context: app
+    - image: 13angs/al_iqraa_app_home
+      context: next-app
       docker:
-        dockerfile: ./dockerfiles/Dockerfile.container
+        dockerfile: ./dockerfiles/Dockerfile
+        buildArgs: 
+          APP_NAME: "home"
       sync:
         manual:
           - dest: .
-            src: "app/container/**/*.js"
-    
-    - image: 13angs/al_iqraa_app_fragment
-      context: app
-      docker:
-        dockerfile: ./dockerfiles/Dockerfile.fragment
-      sync:
-        manual:
-          - dest: .
-            src: "app/fragment/**/*.js"
+            src: "next-app/apps/home/**/*.tsx"
 
+    
     - image: 13angs/al_iqraa_app_dashboard
-      context: app
+      context: next-app
       docker:
-        dockerfile: ./dockerfiles/Dockerfile.dashboard
+        dockerfile: ./dockerfiles/Dockerfile
+        buildArgs: 
+          APP_NAME: "dashboard"
       sync:
         manual:
           - dest: .
-            src: "app/dashboard/**/*.js"
+            src: "next-app/apps/dashboard/**/*.tsx"
   

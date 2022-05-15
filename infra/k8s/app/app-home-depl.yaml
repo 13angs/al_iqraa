@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: app-container-depl 
+  name: app-home-depl 
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: app-container
+      app: app-home
   template:
     metadata:
       labels:
-        app: app-container
+        app: app-home
     spec:
       containers:
-        - name: app-container
-          image: 13angs/al_iqraa_app_container
+        - name: app-home
+          image: 13angs/al_iqraa_app_home
           env:
             - name: PRODUCTION_DOMAIN
               value: http://al-iqraa.com
@@ -23,12 +23,12 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: app-container-srv 
+  name: app-home-srv 
 spec:
   selector:
-    app: app-container
+    app: app-home
   ports:
     - port: 3000
-      name: app-container
+      name: app-home
       protocol: TCP
       targetPort: 3000
