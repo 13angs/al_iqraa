@@ -1,4 +1,5 @@
 // import styles from './index.module.css';
+import { Fab } from '@next-app/fab';
 
 export function Index() {
   /*
@@ -81,6 +82,8 @@ export function Index() {
             className="text-primary hover:text-primary focus:text-primary transition duration-200 ease-in-out">Register</a>
         </p>
       </form>
+
+      <Fab/>
     </div>
   );
 }
