@@ -10,6 +10,7 @@ const nextConfig = {
     // See: https://github.com/gregberge/svgr
     svgr: false,
   },
+  basePath: '/auth'
 };
 
 module.exports = withNx(nextConfig);
