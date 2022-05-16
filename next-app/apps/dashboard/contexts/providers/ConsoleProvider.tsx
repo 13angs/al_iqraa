@@ -14,7 +14,7 @@ export function Wrapper({ children }) {
     
     return (
         <ConsoleProvider>
-            <div>
+            <div className='w-full h-full'>
                 {children}
             </div>
         </ConsoleProvider>
