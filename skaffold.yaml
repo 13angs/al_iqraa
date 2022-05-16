@@ -42,7 +42,7 @@ build:
     - image: 13angs/al_iqraa_app_home
       context: next-app
       docker:
-        dockerfile: ./dockerfiles/Dockerfile
+        dockerfile: ./dockerfiles/Dockerfile.dev
         buildArgs: 
           APP_NAME: "home"
       sync:
@@ -54,7 +54,7 @@ build:
     - image: 13angs/al_iqraa_app_dashboard
       context: next-app
       docker:
-        dockerfile: ./dockerfiles/Dockerfile
+        dockerfile: ./dockerfiles/Dockerfile.dev
         buildArgs: 
           APP_NAME: "dashboard"
       sync:
