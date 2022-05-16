@@ -1,0 +1,30 @@
+FROM node:16-alpine3.14 as base 
+
+# getting env from build/run
+ARG APP_NAME="home"
+ENV APP_NAME=${APP_NAME}
+
+# setup metadata
+LABEL MAINTAINER="13angs" \
+    NAME="Romdon Uma" \
+    APP_NAME=${APP_NAME}
+
+WORKDIR /app
+
+# copy package.json first for faster build
+COPY ./package*.json ./
+
+RUN npm install
+
+COPY ./ ./
+
+RUN npm run build ${APP_NAME} && \
+    npm prune --production
+
+WORKDIR /app/dist/apps/${APP_NAME}
+
+EXPOSE 3000
+
+CMD ["npm", "start", "--", "-p", "3000"]
+
+
