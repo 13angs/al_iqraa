@@ -1,6 +1,7 @@
-import React, {ReactNode} from 'react';
-import { Wrapper} from '../../contexts/providers/ConsoleProvider';
-import consoleContext from '../../contexts/consoleContext';
+import React, { ReactNode } from 'react';
+import { DefaultContext, DefaultContextWrapper } from '@next-app/default-context'
+// import { Wrapper} from '../../contexts/providers/ConsoleProvider';
+// import consoleContext from '../../contexts/consoleContext';
 import Drawer from '../drawer/drawer';
 // import Fab from '../fab/fab';
 import {Fab} from '@next-app/fab';
@@ -12,7 +13,7 @@ export interface LayoutProps {
 }
 
 export default function Layout(props: LayoutProps) {
-  const { theme, setTheme } = React.useContext(consoleContext);
+  const { theme, setTheme } = React.useContext(DefaultContext);
 
 
   const handleChangeTheme = () => {
@@ -25,7 +26,7 @@ export default function Layout(props: LayoutProps) {
   }
 
   return (
-    <Wrapper>
+    <DefaultContextWrapper>
       {/*  */}
       <div className="fixed top-0 left-0 p-3 pl-0 w-full">
         <nav className="ml-80 bg-light-paper dark:bg-dark-paper drop-shadow-md h-16 rounded-xl">
@@ -52,6 +53,6 @@ export default function Layout(props: LayoutProps) {
             }
         `}
         </style>
-    </Wrapper>
+    </DefaultContextWrapper>
   );
 }
