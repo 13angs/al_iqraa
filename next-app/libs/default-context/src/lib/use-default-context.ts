@@ -1,17 +1,7 @@
-import React, { SetStateAction} from 'react';
-
-export interface IConsole {
-    theme: string,
-}
-
-export interface IUseConsole extends IConsole {
-    setState?: (callback: SetStateAction<IConsole>) => void,
-    setTheme?: (html: HTMLElement, localTheme: string)=> void,
-}
+import * as React from 'react';
 
 
-
-export default function useConsole(): IUseConsole {
+export function useDefaultContext() {
     const [state, setState] = React.useState({
         theme: 'light'
     });
@@ -50,3 +40,5 @@ export default function useConsole(): IUseConsole {
         setTheme
     }
 }
+
+export default useDefaultContext;

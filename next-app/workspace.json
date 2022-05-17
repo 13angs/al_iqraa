@@ -2,8 +2,12 @@
   "$schema": "./node_modules/nx/schemas/workspace-schema.json",
   "version": 2,
   "projects": {
+    "auth": "apps/auth",
+    "auth-e2e": "apps/auth-e2e",
     "dashboard": "apps/dashboard",
     "dashboard-e2e": "apps/dashboard-e2e",
+    "default-context": "libs/default-context",
+    "fab": "libs/fab",
     "home": "apps/home",
     "home-e2e": "apps/home-e2e"
   }

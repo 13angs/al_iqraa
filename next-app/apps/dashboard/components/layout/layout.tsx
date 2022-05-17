@@ -1,9 +1,10 @@
-import React, {ReactNode, SetStateAction} from 'react';
-import { Wrapper} from '../../contexts/providers/ConsoleProvider';
-import { IConsole } from '../../contexts/hooks/useConsole';
-import consoleContext from '../../contexts/consoleContext';
+import React, { ReactNode } from 'react';
+import { DefaultContext, DefaultContextWrapper } from '@next-app/default-context'
+// import { Wrapper} from '../../contexts/providers/ConsoleProvider';
+// import consoleContext from '../../contexts/consoleContext';
 import Drawer from '../drawer/drawer';
-import Fab from '../fab/fab';
+// import Fab from '../fab/fab';
+import {Fab} from '@next-app/fab';
 // import styles from './layout.module.css';
 
 /* eslint-disable-next-line */
@@ -12,7 +13,7 @@ export interface LayoutProps {
 }
 
 export default function Layout(props: LayoutProps) {
-  const { theme, setTheme } = React.useContext(consoleContext);
+  const { theme, setTheme } = React.useContext(DefaultContext);
 
 
   const handleChangeTheme = () => {
@@ -25,7 +26,7 @@ export default function Layout(props: LayoutProps) {
   }
 
   return (
-    <Wrapper>
+    <DefaultContextWrapper>
       {/*  */}
       <div className="fixed top-0 left-0 p-3 pl-0 w-full">
         <nav className="ml-80 bg-light-paper dark:bg-dark-paper drop-shadow-md h-16 rounded-xl">
@@ -38,17 +39,13 @@ export default function Layout(props: LayoutProps) {
       {/*  content goes here */}
       <div className="ml-80 mt-20 mr-3">
         <div className="pt-2">
-          <Fab 
-            icon={<svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 stroke-dark-text" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" />
-            </svg>}
-            onClick={(e) => handleChangeTheme()}
-          />
 
           {props.children}
         </div>
       </div>
-
+      <Fab 
+        onClick={(e) => handleChangeTheme()}
+      />
       {/* change the background-color here */}
         <style jsx global>{`
             body {
@@ -56,6 +53,6 @@ export default function Layout(props: LayoutProps) {
             }
         `}
         </style>
-    </Wrapper>
+    </DefaultContextWrapper>
   );
 }

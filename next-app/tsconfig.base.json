@@ -14,7 +14,10 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "paths": {}
+    "paths": {
+      "@next-app/default-context": ["libs/default-context/src/index.ts"],
+      "@next-app/fab": ["libs/fab/src/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }
