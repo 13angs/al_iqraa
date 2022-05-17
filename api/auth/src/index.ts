@@ -6,7 +6,8 @@ import mongoose from 'mongoose';
 import { app } from './app';
 // connecto to mongo db
 const start = async () => {
-    if (!process.env.JWT_KEY) {
+    const jwt_key = process.env.JWT_KEY || 'lskdjfks';
+    if (!jwt_key) {
         throw new Error('JWT_KEY must be defined');
     }
 

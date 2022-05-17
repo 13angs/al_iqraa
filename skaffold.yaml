@@ -39,26 +39,26 @@ build:
           - dest: .
             src: "api/auth/**/*.ts"
 
-    - image: 13angs/al_iqraa_app_home
-      context: next-app
-      docker:
-        dockerfile: ./dockerfiles/Dockerfile.dev
-        buildArgs: 
-          APP_NAME: "home"
-      sync:
-        manual:
-          - dest: .
-            src: "next-app/apps/home/**/*.tsx"
+    # - image: 13angs/al_iqraa_app_home
+    #   context: next-app
+    #   docker:
+    #     dockerfile: ./dockerfiles/Dockerfile.dev
+    #     buildArgs: 
+    #       APP_NAME: "home"
+    #   sync:
+    #     manual:
+    #       - dest: .
+    #         src: "next-app/apps/home/**/*.tsx"
 
     
-    - image: 13angs/al_iqraa_app_dashboard
-      context: next-app
-      docker:
-        dockerfile: ./dockerfiles/Dockerfile.dev
-        buildArgs: 
-          APP_NAME: "dashboard"
-      sync:
-        manual:
-          - dest: .
-            src: "next-app/apps/dashboard/**/*.tsx"
+    # - image: 13angs/al_iqraa_app_dashboard
+    #   context: next-app
+    #   docker:
+    #     dockerfile: ./dockerfiles/Dockerfile.dev
+    #     buildArgs: 
+    #       APP_NAME: "dashboard"
+    #   sync:
+    #     manual:
+    #       - dest: .
+    #         src: "next-app/apps/dashboard/**/*.tsx"
   
