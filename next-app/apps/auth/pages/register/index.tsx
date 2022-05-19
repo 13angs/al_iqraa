@@ -1,22 +1,43 @@
 // import styles from './index.module.css';
 import * as React from 'react';
 import { useRouter } from 'next/router';
-import axios from 'axios';
+import useRequest from '../..//hooks/useRequest';
 
 /* eslint-disable-next-line */
 export interface RegisterProps { }
 
 export function Register(props: RegisterProps) {
-  // response state
-  const [resState, setResState] = React.useState({
-    success: [],
-    errors: []
-  });
+  const router = useRouter();
+  const { query } = router;
 
   const [register, setRegister] = React.useState({
     email: '',
     password: ''
   });
+
+
+  // connect and handle signup api using useRequest hook
+  const { errors: signupErrors, doRequest: signupDoRequest } = useRequest(
+    'http://al-iqraa.com/api/v1/auth/signup',
+    { email: query.email, password: register.password },
+    'post'
+  );
+
+  // connect and handle existemail api using useRequest hook
+  const { errors: existEmailErrors, doRequest: existEmailDoRequest, setErrors: setExistEmailErrors } = useRequest(
+    'http://al-iqraa.com/api/v1/auth/existemail',
+    { email: register.email },
+    'post',
+    () => {
+      // reset/hide if theres errors in exist email
+      setExistEmailErrors([]);
+
+      router.push({
+        pathname: '/register',
+        query: { email: register.email }
+      })
+    }
+  );
 
 
   const handleInputdata = (e) => {
@@ -31,77 +52,32 @@ export function Register(props: RegisterProps) {
 
     if (userEmail) {
 
-      // handle the password errors
-      try {
-        await axios.post('http://al-iqraa.com/api/v1/auth/signup', {
-          email: query.email,
-          password: register.password
-        });
-
-
-      } catch (errs) {
-        // console.log(errs);
-        setResState(prev => ({
-          ...prev,
-          errors: errs.response.data.errors
-        }));
-      }
+      signupDoRequest();
 
       return;
 
     }
 
     // check if email exist
-    try {
-      // query the email
-      const res = await axios.post('http://al-iqraa.com/api/v1/auth/existemail', {
-        email: register.email
-      });
-
-      console.log(res);
-
-      // reset the errors if exist
-      setResState(prev => ({
-        ...prev,
-        errors: []
-      }));
-
-    } catch (errs) {
-      console.log(errs.response.data.errors);
-      setResState(prev => ({
-        ...prev,
-        errors: errs.response.data.errors
-      }));
-      return;
-
-    }
-
-    // send the user/email to the route
-    // switch to password
-    router.push({
-      pathname: '/register',
-      query: { email: register.email }
-    })
+    existEmailDoRequest();
   }
+
 
   // error handler 
   const errorhandler = () => {
-    const passError = resState.errors.find((err) => err.field === 'password');
-
-
-    if (passError) {
-      return (<span className='block text-red-500 mt-2'>{resState.errors.length > 0 && passError.message}</span>)
+    if (signupErrors.length > 0) {
+      const passError = signupErrors.find((err) => err.field === 'password');
+      return (<span className='block text-red-500 mt-2'>{passError.message}</span>)
     }
 
     // handle email error
-    if (resState.errors.length > 0) {
-      return (<span className='block text-red-500 mt-2'>{resState.errors.length > 0 && resState.errors[0].message}</span>)
+    // const existEmail = existEmailErrors || [];
+    if (existEmailErrors.length > 0) {
+      return (<span className='block text-red-500 mt-2'>{existEmailErrors[0].message}</span>)
     }
 
   }
 
-  const router = useRouter();
-  const { query } = router;
 
   // make sure to use premetive types
   const userEmail = React.useMemo(() => {
@@ -138,38 +114,10 @@ export function Register(props: RegisterProps) {
             value={userEmail ? register.password : register.email}
             onChange={handleInputdata}
           />
+          {/* handle the email and password errors */}
           {errorhandler()}
-          {/* <span>{resState.errors.length > 0 && resState.errors.find((err) => err.field === 'password')}</span> */}
         </div>
-        {/* <div className="form-group mb-6">
-          <label htmlFor="exampleInputPassword2" className="form-label inline-block mb-2 text-light-text">Password</label>
-          <input type="password" className="form-control block
-            w-full
-            px-3
-            py-1.5
-            text-base
-            font-normal
-            text-light-text
-            bg-white bg-clip-padding
-            border border-solid border-gray-300
-            rounded
-            transition
-            ease-in-out
-            m-0
-            focus:text-light-text focus:bg-white focus:border-primary focus:outline-none" id="exampleInputPassword2"
-            placeholder="Password" />
-        </div>
-        <div className="flex justify-between items-center mb-6">
-          <div className="form-group form-check">
-            <input type="checkbox"
-              className="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-primary checked:border-primary focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
-              id="exampleCheck2" />
-            <label className="form-check-label inline-block text-gray-800" htmlFor="exampleCheck2">Remember me</label>
-          </div>
-          <a href="#!"
-            className="text-primary hover:text-primary focus:text-primary transition duration-200 ease-in-out">Forgot
-            password?</a>
-        </div> */}
+
         <button type={userEmail ? 'submit' : 'button'} className="
           w-full
           px-6
@@ -198,7 +146,7 @@ export function Register(props: RegisterProps) {
 
       {/* <Fab /> */}
     </div>
-  );
+  )
 }
 
 export default Register;
