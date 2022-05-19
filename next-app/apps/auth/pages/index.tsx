@@ -8,7 +8,7 @@ export function Index() {
   const router = useRouter();
   const [login, setLogin] = React.useState({
     email: '',
-    password: 'password'
+    password: ''
   })
   /*
    * Replace the elements below with your own.
