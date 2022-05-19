@@ -7,6 +7,12 @@ import axios from 'axios';
 export interface RegisterProps { }
 
 export function Register(props: RegisterProps) {
+  // response state
+  const [resState, setResState] = React.useState({
+    success: [],
+    errors: []
+  });
+
   const [register, setRegister] = React.useState({
     email: '',
     password: ''
@@ -20,15 +26,87 @@ export function Register(props: RegisterProps) {
     }))
   }
 
+  const handleEmail = async (e) => {
+    e.preventDefault();
+
+    if (userEmail) {
+
+      // handle the password errors
+      try {
+        await axios.post('http://al-iqraa.com/api/v1/auth/signup', {
+          email: query.email,
+          password: register.password
+        });
+
+
+      } catch (errs) {
+        // console.log(errs);
+        setResState(prev => ({
+          ...prev,
+          errors: errs.response.data.errors
+        }));
+      }
+
+      return;
+
+    }
+
+    // check if email exist
+    try {
+      // query the email
+      const res = await axios.post('http://al-iqraa.com/api/v1/auth/existemail', {
+        email: register.email
+      });
+
+      console.log(res);
+
+      // reset the errors if exist
+      setResState(prev => ({
+        ...prev,
+        errors: []
+      }));
+
+    } catch (errs) {
+      console.log(errs.response.data.errors);
+      setResState(prev => ({
+        ...prev,
+        errors: errs.response.data.errors
+      }));
+      return;
+
+    }
+
+    // send the user/email to the route
+    // switch to password
+    router.push({
+      pathname: '/register',
+      query: { email: register.email }
+    })
+  }
+
+  // error handler 
+  const errorhandler = () => {
+    const passError = resState.errors.find((err) => err.field === 'password');
+
+
+    if (passError) {
+      return (<span className='block text-red-500 mt-2'>{resState.errors.length > 0 && passError.message}</span>)
+    }
+
+    // handle email error
+    if (resState.errors.length > 0) {
+      return (<span className='block text-red-500 mt-2'>{resState.errors.length > 0 && resState.errors[0].message}</span>)
+    }
+
+  }
+
   const router = useRouter();
   const { query } = router;
 
+  // make sure to use premetive types
   const userEmail = React.useMemo(() => {
-    if (query) {
-      return query.email;
-    }
-    return null;
-  }, [query]);
+    return query.email || null;
+  }, [query.email]);
 
   return (
     <div className="block p-6 rounded-lg shadow-lg bg-white max-w-sm m-auto mt-52">
@@ -60,6 +138,8 @@ export function Register(props: RegisterProps) {
             value={userEmail ? register.password : register.email}
             onChange={handleInputdata}
           />
+          {errorhandler()}
+          {/* <span>{resState.errors.length > 0 && resState.errors.find((err) => err.field === 'password')}</span> */}
         </div>
         {/* <div className="form-group mb-6">
           <label htmlFor="exampleInputPassword2" className="form-label inline-block mb-2 text-light-text">Password</label>
@@ -108,26 +188,7 @@ export function Register(props: RegisterProps) {
           transition
           duration-150
           ease-in-out"
-          onClick={(e) => {
-            e.preventDefault();
-
-            if (userEmail) {
-              e.preventDefault();
-              console.log(query.email, register.password);
-              axios.post('http://al-iqraa.com/api/v1/auth/signup', {
-                email: query.email,
-                password: register.password
-              }).then(res => {
-                console.log(res);
-              })
-            }
-            // send the user/email to the route
-            // switch to password
-            router.push({
-              pathname: '/register',
-              query: { email: register.email }
-            })
-          }}
+          onClick={handleEmail}
         >Continue with Email</button>
         <p className="mt-6 text-center cursor-pointer"><a
           onClick={() => router.push('/')}
